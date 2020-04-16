@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+    
+<head>
+    <title>Blog Project</title>
+    <!--    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>-->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.js"></script>
+
+    <style type="text/css">
+    
+        html, body {
+            padding: 10px;
+            clear: both;
+            float: left;
+        }
+    
+        #singleBlogPost {
+            border: solid blue 2px;
+            padding: 10px;
+            margin-bottom: 25px;
+        }
+
+        #blogPostCreation {
+            border: solid green 2px;
+            padding: 10px;
+            margin-bottom: 25px;
+        }
+
+        #blogPostCreation > * {                 /*  all children of the element  */
+            margin: 10px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+    <!-- *************** HTML SECTION ********************************* -->
+
+    <h1>Kite Surf Donegal Blog</h1>
+    
+    <div id="blogPostCreation">
+        <h2>Create new blog post</h2>
+        <input v-model="title"><br>
+        <input v-model="username"><br>
+        <input v-model="date"><br>
+        <input v-model="content"><br>
+        <button v-on:click="publishPost">Publish Post</button>
+    </div>
+
+    <div id="blogPosts">
+        <blog-post v-for="post in posts" v-bind:blogpost="post"></blog-post>        <!-- posts is in the blogVue data section -->
+                                                                                    <!-- blogpost is in the props of the component -->    
+    </div>
+        
+    <!-- ************************************************************************* -->
+    
+    <!-- *************** VUE JAVA SCRIPT SECTION ********************************* -->
+
+    <script>
+        Vue.component("blog-post", {
+            props: ["blogpost"],
+            template: `<div id="singleBlogPost">
+                            <h2>{{ blogpost.title }}</h2>
+                            <h3>{{ blogpost.username }}</h3>
+                            <h4>{{ blogpost.date }}</h4>
+                            <p>{{ blogpost.content }}</p>
+                        </div>`,
+            })
+
+        var blogVue = new Vue ({
+            el: "#blogPosts",
+            data: {
+                posts: [
+                    {title:"Donegal Kite Surfing - Issue 1",
+                     username:"Mark Boomer",
+                     date:"Tue, 7 April 2020",
+                     content: "Kite surfing on Magheraroarty beach, Gortahork"
+                    },
+                    {title:"Donegal Kite Surfing - Issue 2",
+                     username:"Mark Boomer",
+                     date:"Tue, 14 April 2020",
+                     content: "Kite surfing on Magheraroarty beach, Gortahork - wind direction"
+                    },
+                    {title:"Donegal Kite Surfing - Issue 3",
+                     username:"Mark Boomer",
+                     date:"Tue, 21 April 2020",
+                     content: "Kite surfing on Magheraroarty beach, Gortahork - kite set up"
+                    },
+                ]
+            }
+        })
+    
+        var blogPostVue = new Vue ({
+            el: "#blogPostCreation",
+            data: {
+                title: "",
+                username: "",
+                date: "",
+                content: "",
+            },
+            methods: {
+                 publishPost: function () {
+                     var postData = {
+                         title: this.title,
+                         username: this.username,
+                         date: this.date,
+                         content: this.content
+                     }
+                     blogVue.posts.push(postData)
+                     
+                    this.title = ''
+                    this.username = ''
+                    this.date = ''
+                    this.content = ''
+                 }
+            }
+        })
+
+    </script>
+    
+    
+</body>
+    
+</html>
